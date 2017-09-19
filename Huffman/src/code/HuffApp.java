@@ -1,6 +1,7 @@
 package code;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -8,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.io.FileReader;;
 
 
 public class HuffApp {
@@ -19,10 +21,11 @@ public class HuffApp {
 	private String encodedMessage = "";
 	private String[] codeTable;
 	private String decodedMessage = "";
+	ArrayList<HuffNode> huffArray = new ArrayList<HuffNode>();
 	
 
 	public static void main(String[] args) {
-		//new HuffApp();	
+		new HuffApp();	
 		
 	}
 		
@@ -35,6 +38,7 @@ public class HuffApp {
 		displayFrequencyTable();
 		addToQueue();
 		buildTree(theQueue);
+		printTree(huffTree.root);
 		//when the following method is implemented, remove the "//", so it executes
 		//makeCodeTable(huffTree.root, "");  						
 		encode();
@@ -45,34 +49,107 @@ public class HuffApp {
 	}
 	
 	private void readInput() {
-		//read input in from the input.txt file and save to originalMessage	field
+		BufferedReader reader = null;
+
+		try {
+		    File file = new File("input.txt");
+		    reader = new BufferedReader(new FileReader(file));
+
+		    String line;
+		    while ((line = reader.readLine()) != null) {
+		        originalMessage+= line;
+		        System.out.println(originalMessage);
+		    }
+
+		} catch (IOException e) {
+		    e.printStackTrace();
+		} finally {
+		    try {
+		        reader.close();
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
+		}
 	}
 	
 	private void displayOriginalMessage() {
-		System.out.println("Original message: " +  originalMessage);
+		//System.out.println("Original message: " +  originalMessage);
 	}
 	
 	private void makeFrequencyTable(String inputString)
 	{	
-		//populate the frequency table using inputString. results are saved to the 
-		//freqTable field
+		//ArrayList<HuffNode> huffList = new ArrayList<HuffNode>();
+		
+		for(int i=0; i<inputString.length(); i++)
+		{
+			boolean flag = false;
+			for (int j=0; j<huffArray.size(); j++)
+			{
+				if(inputString.charAt(i)==huffArray.get(j).character)
+				{
+					flag=true;
+					huffArray.get(j).weight++;
+				}
+			}
+			if (flag==false)
+				huffArray.add(new HuffNode(inputString.charAt(i), 1));
+		}
+		
 	}
 	
 	private void displayFrequencyTable()
-	{	
-		//print the frequency table. skipping any elements that are not represented
+	{
+		
+		/*for (int i=0; i<huffList.size(); i++)
+		{
+			System.out.print(huffList.get(i).character + "   |" + huffList.get(i).weight+"\n");
+		}*/
 	}
 	
 	private void addToQueue() 
 	{
-		//add the values in the frequency table to the PriorityQueue. Hint use the 
-		//PriorityQ class. save the results to theQueue field
+		theQueue = new PriorityQ(huffArray.size());
+		
+		for (int i=0; i<huffArray.size(); i++)
+		{
+			
+			theQueue.insert(new HuffTree(huffArray.get(i).character, huffArray.get(i).weight));
+		}
+		
+		/*while (theQueue.getSize()>0)
+		{
+			System.out.println(theQueue.remove().getWeight());
+		}*/
 	}
 	
 	private void buildTree(PriorityQ hufflist) 
 	{
 		//pull items from the priority queue and combine them to form 
 		//a HuffTree. Save the results to the huffTree field
+		while (hufflist.getSize()>1)
+		{
+			HuffTree temp1 = hufflist.remove();
+			HuffTree temp2 = hufflist.remove();
+			int w = temp1.getWeight() + temp2.getWeight();
+			HuffTree temp3 = new HuffTree(w, temp1, temp2);
+			hufflist.insert(temp3);
+					
+		}
+		
+		huffTree = hufflist.remove();
+	}
+	public void printTree(HuffNode root)
+	{
+		if (root.isLeaf())
+		{
+			System.out.print(root.character + " " + root.weight + "\n");
+			return;
+		}
+		printTree(root.leftChild);
+		printTree(root.rightChild);
+		
+		
+		
 	}
 	
 	private void makeCodeTable(HuffNode huffNode, String bc)
