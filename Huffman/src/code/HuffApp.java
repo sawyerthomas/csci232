@@ -40,7 +40,7 @@ public class HuffApp {
 		buildTree(theQueue);
 		printTree(huffTree.root);
 		//when the following method is implemented, remove the "//", so it executes
-		//makeCodeTable(huffTree.root, "");  						
+		makeCodeTable(huffTree.root, "");  						
 		encode();
 		displayEncodedMessage();
 		displayCodeTable();
@@ -154,12 +154,24 @@ public class HuffApp {
 	
 	private void makeCodeTable(HuffNode huffNode, String bc)
 	{		
+		if (huffNode.isLeaf())
+		{
+			codeTable[(int) huffNode.character-1] = bc;
+			System.out.println(huffNode.character + " "+bc);
+			return;
+		}
+		makeCodeTable(huffNode.rightChild, bc+='1');
+		makeCodeTable(huffNode.leftChild, bc+='0');
 		//hint, this will be a recursive method
 	}
 	
 	private void displayCodeTable()
 	{	
-		//print code table, skipping any empty elements
+		for (int i=0; i<codeTable.length; i++)
+		{
+			if (codeTable[i]!=null)
+			System.out.println(i + codeTable[i]);
+		}
 	}
 	
 	private void encode()                   
