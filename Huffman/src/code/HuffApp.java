@@ -38,7 +38,7 @@ public class HuffApp {
 		displayFrequencyTable();
 		addToQueue();
 		buildTree(theQueue);
-		printTree(huffTree.root);
+		//printTree(huffTree.root);
 		//when the following method is implemented, remove the "//", so it executes
 		makeCodeTable(huffTree.root, "");  						
 		encode();
@@ -73,12 +73,12 @@ public class HuffApp {
 	}
 	
 	private void displayOriginalMessage() {
-		//System.out.println("Original message: " +  originalMessage);
+		System.out.println("Original message: " +  originalMessage);
 	}
 	
 	private void makeFrequencyTable(String inputString)
 	{	
-		//ArrayList<HuffNode> huffList = new ArrayList<HuffNode>();
+		
 		
 		for(int i=0; i<inputString.length(); i++)
 		{
@@ -100,15 +100,18 @@ public class HuffApp {
 	private void displayFrequencyTable()
 	{
 		
-		/*for (int i=0; i<huffList.size(); i++)
+		for (int i=0; i<huffArray.size(); i++)
 		{
-			System.out.print(huffList.get(i).character + "   |" + huffList.get(i).weight+"\n");
-		}*/
+			System.out.print(huffArray.get(i).character + "   |" + huffArray.get(i).weight+"\n");
+		}
 	}
 	
 	private void addToQueue() 
 	{
 		theQueue = new PriorityQ(huffArray.size());
+		System.out.println("_______________");
+		System.out.println();
+		
 		
 		for (int i=0; i<huffArray.size(); i++)
 		{
@@ -118,7 +121,7 @@ public class HuffApp {
 		
 		/*while (theQueue.getSize()>0)
 		{
-			System.out.println(theQueue.remove().getWeight());
+			System.out.println(theQueue.remove().getWeight() );
 		}*/
 	}
 	
@@ -133,12 +136,13 @@ public class HuffApp {
 			int w = temp1.getWeight() + temp2.getWeight();
 			HuffTree temp3 = new HuffTree(w, temp1, temp2);
 			hufflist.insert(temp3);
+			System.out.println(temp3.getWeight());
 					
 		}
 		
 		huffTree = hufflist.remove();
 	}
-	public void printTree(HuffNode root)
+	/*public void printTree(HuffNode root)
 	{
 		if (root.isLeaf())
 		{
@@ -150,18 +154,23 @@ public class HuffApp {
 		
 		
 		
-	}
+	}*/
 	
 	private void makeCodeTable(HuffNode huffNode, String bc)
 	{		
+		
 		if (huffNode.isLeaf())
 		{
 			codeTable[(int) huffNode.character-1] = bc;
-			System.out.println(huffNode.character + " "+bc);
+			//System.out.println(huffNode.character + " "+bc);
 			return;
 		}
-		makeCodeTable(huffNode.rightChild, bc+='1');
+		
 		makeCodeTable(huffNode.leftChild, bc+='0');
+		bc = bc.substring(0, bc.length()-1);
+		
+		makeCodeTable(huffNode.rightChild, bc+='1');
+		
 		//hint, this will be a recursive method
 	}
 	
@@ -170,13 +179,18 @@ public class HuffApp {
 		for (int i=0; i<codeTable.length; i++)
 		{
 			if (codeTable[i]!=null)
-			System.out.println(i + codeTable[i]);
+			System.out.println((char) (i+1) + "   |"+codeTable[i]);
 		}
 	}
 	
 	private void encode()                   
 	{		
 		//use the code table to encode originalMessage. Save result in the encodedMessage field
+		
+		for (int i=0; i<originalMessage.length(); i++)
+		{
+			encodedMessage+=codeTable[(int) originalMessage.charAt(i)-1];
+		}
 	}
 
 	private void displayEncodedMessage() {
@@ -185,7 +199,26 @@ public class HuffApp {
 
 	private void decode()
 	{
-		//decode the message and store the result in the decodedMessage field
+		//System.out.print((int) 'd');
+		//System.out.println(codeTable[99]);
+		String s = "";
+		
+		for (int i=0; i<encodedMessage.length(); i++)
+		{
+			s+=encodedMessage.charAt(i);
+			
+			for (int j=1; j<codeTable.length; j++)
+			{
+				if (s.equals(codeTable[j-1]))
+				{
+					
+					decodedMessage+=(char) j;
+					s="";
+				}
+				
+			}
+		}
+		
 	}
 	
 	public void displayDecodedMessage() {
