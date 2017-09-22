@@ -1,3 +1,11 @@
+/*
+ * Sawyer Thomas
+ * Edward Farley
+ * 
+ * csci232 Lab1: HuffMan Coding
+ */
+
+
 package code;
 
 import java.io.BufferedReader;
@@ -38,8 +46,7 @@ public class HuffApp {
 		displayFrequencyTable();
 		addToQueue();
 		buildTree(theQueue);
-		//printTree(huffTree.root);
-		//when the following method is implemented, remove the "//", so it executes
+		
 		makeCodeTable(huffTree.root, "");  						
 		encode();
 		displayEncodedMessage();
@@ -48,7 +55,8 @@ public class HuffApp {
 		displayDecodedMessage();		
 	}
 	
-	private void readInput() {
+	private void readInput() //this method takes in a file called input.txt and saves it as a string
+	{
 		BufferedReader reader = null;
 
 		try {
@@ -76,7 +84,8 @@ public class HuffApp {
 		System.out.println("Original message: " +  originalMessage);
 	}
 	
-	private void makeFrequencyTable(String inputString)
+	private void makeFrequencyTable(String inputString)/*iterates through the string, then iterates through arraylist.
+	if the character in the string is already represented in the list, increment frequency. else create a new object in the list*/
 	{	
 		
 		
@@ -97,20 +106,21 @@ public class HuffApp {
 		
 	}
 	
-	private void displayFrequencyTable()
+	private void displayFrequencyTable()/*iterates through the arraylist, mostly just formatting*/
 	{
+		System.out.println("Frequency Table: ");
+		System.out.println("char |val");
 		
 		for (int i=0; i<huffArray.size(); i++)
 		{
-			System.out.print(huffArray.get(i).character + "   |" + huffArray.get(i).weight+"\n");
+			
+			System.out.print(huffArray.get(i).character + "    |" + huffArray.get(i).weight+"\n");
 		}
 	}
 	
-	private void addToQueue() 
+	private void addToQueue() //takes huffNodes, turns them into hufftrees, adds them to the queue
 	{
 		theQueue = new PriorityQ(huffArray.size());
-		System.out.println("_______________");
-		System.out.println();
 		
 		
 		for (int i=0; i<huffArray.size(); i++)
@@ -119,50 +129,36 @@ public class HuffApp {
 			theQueue.insert(new HuffTree(huffArray.get(i).character, huffArray.get(i).weight));
 		}
 		
-		/*while (theQueue.getSize()>0)
-		{
-			System.out.println(theQueue.remove().getWeight() );
-		}*/
+		
 	}
 	
 	private void buildTree(PriorityQ hufflist) 
 	{
 		//pull items from the priority queue and combine them to form 
 		//a HuffTree. Save the results to the huffTree field
-		while (hufflist.getSize()>1)
+		while (hufflist.getSize()>1)//iteratively, removes two trees, combines them with a parent node, inserts them back into tree
 		{
 			HuffTree temp1 = hufflist.remove();
 			HuffTree temp2 = hufflist.remove();
 			int w = temp1.getWeight() + temp2.getWeight();
 			HuffTree temp3 = new HuffTree(w, temp1, temp2);
 			hufflist.insert(temp3);
-			System.out.println(temp3.getWeight());
+			
 					
 		}
 		
 		huffTree = hufflist.remove();
 	}
-	/*public void printTree(HuffNode root)
-	{
-		if (root.isLeaf())
-		{
-			System.out.print(root.character + " " + root.weight + "\n");
-			return;
-		}
-		printTree(root.leftChild);
-		printTree(root.rightChild);
-		
-		
-		
-	}*/
+
 	
-	private void makeCodeTable(HuffNode huffNode, String bc)
+	
+	private void makeCodeTable(HuffNode huffNode, String bc)/*casts the character to its acii value inserts it into the array*/
 	{		
 		
 		if (huffNode.isLeaf())
 		{
 			codeTable[(int) huffNode.character-1] = bc;
-			//System.out.println(huffNode.character + " "+bc);
+			
 			return;
 		}
 		
@@ -171,11 +167,12 @@ public class HuffApp {
 		
 		makeCodeTable(huffNode.rightChild, bc+='1');
 		
-		//hint, this will be a recursive method
+		
 	}
 	
-	private void displayCodeTable()
-	{	
+	private void displayCodeTable()/*casts index to a charcter, formatting*/
+	{
+		System.out.println("Code Table: ");
 		for (int i=0; i<codeTable.length; i++)
 		{
 			if (codeTable[i]!=null)
@@ -183,9 +180,9 @@ public class HuffApp {
 		}
 	}
 	
-	private void encode()                   
+	private void encode()/*reference the code table with the ascii index of the character in the string*/                   
 	{		
-		//use the code table to encode originalMessage. Save result in the encodedMessage field
+		
 		
 		for (int i=0; i<originalMessage.length(); i++)
 		{
@@ -199,13 +196,12 @@ public class HuffApp {
 
 	private void decode()
 	{
-		//System.out.print((int) 'd');
-		//System.out.println(codeTable[99]);
+		
 		String s = "";
 		
 		for (int i=0; i<encodedMessage.length(); i++)
 		{
-			s+=encodedMessage.charAt(i);
+			s+=encodedMessage.charAt(i);//iteratively add code character to the string
 			
 			for (int j=1; j<codeTable.length; j++)
 			{
@@ -213,7 +209,7 @@ public class HuffApp {
 				{
 					
 					decodedMessage+=(char) j;
-					s="";
+					s="";//empty the temp string if a code has been found
 				}
 				
 			}
