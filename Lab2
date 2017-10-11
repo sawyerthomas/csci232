@@ -1,0 +1,194 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package pkg232lab2graphs;
+import java.io.*;
+import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+/**
+ *
+ * @author Sawyer
+ */
+public class Graph {
+    
+    
+          //fields
+    private Vertex vertexList[]={new Vertex('a', 0), new Vertex ('b', 1), new Vertex('c', 2), new Vertex('d', 3), new Vertex('e', 4)};
+    private int adjacencyMatrix[][]={{0,0,0,1,1}, {0,0,0,0,1}, {0,0,0,1,0},{1,0,1,0,0},{1,1,0,0,0}};
+    Stack<Vertex> dSearch =new Stack<>();  
+    Queue<Vertex> q = new LinkedList<>();
+    
+//constructor calls methods that read the input files
+    public Graph() 
+    { 
+        readLabels("labels.txt");
+        readAdjacencyMatrix("adjacency_matrix.txt");
+    } 
+    
+//using an integer passed in, finds the associated vertex in the vertexList 
+//array and prints out the associated label
+    public void displayVertex(int vertexIndex) //reads the adjacency matrix input file and saves it into the adjacencyMatrix 
+    {
+        
+    }
+
+//field
+    private void readAdjacencyMatrix(String filePath) 
+    {
+        
+    }
+//reads the labels input file, creates a new vertex for each label, and saves each new vertex into the vertexList field
+    private void readLabels(String filePath)
+    {
+        
+    }
+//implements the depth first search algorithm calling 
+//getAdjacentUnvisitedVertex() and displayVertex() as needed
+   public void depthFirstSearch()
+    {
+         
+        dSearch.push(vertexList[0]);
+        vertexList[0].wasVisited=1;
+        int i=0;
+        int j=0;
+        
+        while(i<adjacencyMatrix[0].length)
+        {
+            //System.out.println("i"+i);
+            j=0;
+            while(j<adjacencyMatrix.length)
+            {
+               //System.out.println("i"+i+"j"+j);
+        
+                 if(adjacencyMatrix[i][j]==1 && vertexList[j].wasVisited==0)
+                 {
+                     
+                   dSearch.push(vertexList[j]);
+                   System.out.println("push "+dSearch.peek().label);
+                   vertexList[j].wasVisited=1;
+                   i=j;
+                   j=0;
+                
+                 }
+                  j++;
+            }
+  
+            i=i+1;
+            if(!dSearch.empty())
+           {
+             System.out.println("found the vertex "+dSearch.pop().label); 
+           }
+           if(!dSearch.empty())
+           {
+            //System.out.println("the next array to go to is "+dSearch.peek().location);
+            i=dSearch.peek().location;
+           }
+            
+           
+        }
+        
+        
+    }
+
+
+                    
+    public void breadthFirstSearch()//implements the minimum spanning tree algorithm calling          //getAdjacentUnvisitedVertex() and displayVertex() as neededpublicvoidminimum_spanning_tree()  //returns an unvisited vertex adjacent to the vertex indicated by vertexIndex //using the vertexList and adjacenyMatrix fieldspublicint getAdjacentUnvisitedVertex(int vertexIndex
+    {
+        
+       Vertex current; 
+     for(int b=0;b<adjacencyMatrix[0].length; b++)
+     {
+        vertexList[b].wasVisited=0; 
+     }
+     
+        q.add(vertexList[0]);
+        vertexList[0].wasVisited=1;
+        current=q.remove();
+        System.out.println("we found " + current.label);
+        
+        int i=0;
+        int j=0;
+        
+        while(i<adjacencyMatrix[0].length)
+        {
+           
+            j=0;
+            while(j<adjacencyMatrix.length)
+            {
+               
+        
+                 if(adjacencyMatrix[i][j]==1 && vertexList[j].wasVisited==0)
+                 {  
+                   q.add(vertexList[j]);
+                   System.out.println("added "+vertexList[j].label);
+                   vertexList[j].wasVisited=1;
+                 }
+                  j++;
+            }
+            i=i+1;
+            if(q.size() != 0)
+           {
+             current=q.remove();
+             i=current.location;
+             System.out.println("found the vertex "+current.label); 
+           }
+        }
+        
+        
+    }     
+    
+    public void minimum_spanning_tree()
+    {
+        
+        for(int b=0;b<adjacencyMatrix[0].length; b++)
+     {
+        vertexList[b].wasVisited=0; 
+     }
+        
+         dSearch.push(vertexList[0]);
+        vertexList[0].wasVisited=1;
+        int i=0;
+        int j=0;
+        
+        while(i<adjacencyMatrix[0].length)
+        {
+            //System.out.println("i"+i);
+            j=0;
+            while(j<adjacencyMatrix.length)
+            {
+               //System.out.println("i"+i+"j"+j);
+        
+                 if(adjacencyMatrix[i][j]==1 && vertexList[j].wasVisited==0)
+                 {
+                   System.out.print(" "+dSearch.peek().label) ; 
+                   dSearch.push(vertexList[j]);
+                   System.out.print(dSearch.peek().label);
+                   vertexList[j].wasVisited=1;
+                   i=j;
+                   j=0;
+                
+                 }
+                  j++;
+            }
+  
+            i=i+1;
+            if(!dSearch.empty())
+           {
+             dSearch.pop(); 
+           }
+           if(!dSearch.empty())
+           {
+            //System.out.println("the next array to go to is "+dSearch.peek().location);
+            i=dSearch.peek().location;
+           }
+            
+           
+        }
+        System.out.println(" ");
+    }
+    
+    
+}
