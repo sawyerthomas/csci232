@@ -1,0 +1,19 @@
+package pkg232lab2graphs;
+
+/**
+ *
+ * @author Sawyer
+ */
+public class Vertex {
+    public int location;
+    public char label;        // label (e.g. 'A')
+    public int wasVisited=0;
+    
+    public Vertex(char lab, int num)   // constructor
+    { 
+        label = lab;
+        wasVisited = 0;
+        location=num;
+    }
+    
+}
