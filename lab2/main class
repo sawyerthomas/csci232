@@ -1,0 +1,31 @@
+package pkg232lab2graphs;
+
+/**
+ *
+ * @author Sawyer
+ */
+public class Main {
+
+    private Vertex vertexList[];
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) 
+    {
+     Graph theGraph = new Graph();
+     System.out.println("Depth First Search Visits: ");
+     theGraph.depthFirstSearch();
+     System.out.println("");
+     System.out.println("Breadth First Search Visits: ");
+     theGraph.breadthFirstSearch();
+     System.out.println("");
+     System.out.println("Mininum Spanning Tree: ");
+     theGraph.minimum_spanning_tree();
+     System.out.println("");
+       
+        
+        // TODO code application logic here
+    }
+    
+}
